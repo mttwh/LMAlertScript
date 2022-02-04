@@ -1,8 +1,4 @@
-#Account Info - uses an API user with manage access to reports and view access to all resources. Creds hard-coded so it can be used in automated jobs.
-AccessId = "VV9Uf6742JRv49I8w4J6"
-AccessKey = "X59SQT-6y5c%n2hgnMk%-=4Ya[Jbv5}rKz39GU26"
-Company = 'haservices'
-def grab_alerts():
+def grab_alerts(accessId, accessKey, lmCompany):
 
     import requests
     import json
@@ -38,7 +34,7 @@ def grab_alerts():
         dayCounter +=1
 
         #Construct URL 
-        url = 'https://'+ Company +'.logicmonitor.com/santaba/rest' + resourcePath 
+        url = 'https://'+ lmCompany +'.logicmonitor.com/santaba/rest' + resourcePath 
         
         #Get current time in milliseconds
         epoch = str(int(time.time() * 1000))
@@ -47,11 +43,11 @@ def grab_alerts():
         requestVars = httpVerb + epoch + data + resourcePath
 
         #Construct signature
-        hmac1 = hmac.new(AccessKey.encode(),msg=requestVars.encode(),digestmod=hashlib.sha256).hexdigest()
+        hmac1 = hmac.new(accessKey.encode(),msg=requestVars.encode(),digestmod=hashlib.sha256).hexdigest()
         signature = base64.b64encode(hmac1.encode())
 
         #Construct headers
-        auth = 'LMv1 ' + AccessId + ':' + signature.decode() + ':' + epoch
+        auth = 'LMv1 ' + accessId + ':' + signature.decode() + ':' + epoch
         headers = {'Content-Type':'application/json','Authorization':auth}
 
         #Make request
@@ -78,7 +74,7 @@ def grab_alerts():
         runReportresourcePath = '/functions'
         runReportdata = '{"type":"generateReport","reportId":' + str(reportId) + '}'
         #Construct URL
-        runReporturl = 'https://'+ Company +'.logicmonitor.com/santaba/rest' + runReportresourcePath
+        runReporturl = 'https://'+ lmCompany +'.logicmonitor.com/santaba/rest' + runReportresourcePath
 
         #Get current time in milliseconds
         runReportepoch = str(int(time.time() * 1000))
@@ -87,11 +83,11 @@ def grab_alerts():
         runReportrequestVars = runReporthttpVerb + runReportepoch + runReportdata + runReportresourcePath
 
         #Construct signature
-        runReporthmac1 = hmac.new(AccessKey.encode(),msg=runReportrequestVars.encode(),digestmod=hashlib.sha256).hexdigest()
+        runReporthmac1 = hmac.new(accessKey.encode(),msg=runReportrequestVars.encode(),digestmod=hashlib.sha256).hexdigest()
         runReportsignature = base64.b64encode(runReporthmac1.encode())
         
         #Construct headers
-        runReportauth = 'LMv1 ' + AccessId + ':' + runReportsignature.decode() + ':' + runReportepoch
+        runReportauth = 'LMv1 ' + accessId + ':' + runReportsignature.decode() + ':' + runReportepoch
         runReportheaders = {'Content-Type':'application/json','Authorization':runReportauth}
 
         #Make request
@@ -181,7 +177,7 @@ def grab_alerts():
         deleteReportresourcePath = '/report/reports/' + str(reportIdToDelete)
 
         #Construct URL 
-        deleteReporturl = 'https://'+ Company +'.logicmonitor.com/santaba/rest' + deleteReportresourcePath 
+        deleteReporturl = 'https://'+ lmCompany +'.logicmonitor.com/santaba/rest' + deleteReportresourcePath 
 
         #Get current time in milliseconds
         deleteReportepoch = str(int(time.time() * 1000))
@@ -190,11 +186,11 @@ def grab_alerts():
         deleteReportrequestVars = deleteReporthttpVerb + deleteReportepoch + deleteReportresourcePath
 
         #Construct signature
-        deleteReporthmac1 = hmac.new(AccessKey.encode(),msg=deleteReportrequestVars.encode(),digestmod=hashlib.sha256).hexdigest()
+        deleteReporthmac1 = hmac.new(accessKey.encode(),msg=deleteReportrequestVars.encode(),digestmod=hashlib.sha256).hexdigest()
         deleteReportsignature = base64.b64encode(deleteReporthmac1.encode())
 
         #Construct headers
-        deleteReportauth = 'LMv1 ' + AccessId + ':' + deleteReportsignature.decode() + ':' + deleteReportepoch
+        deleteReportauth = 'LMv1 ' + accessId + ':' + deleteReportsignature.decode() + ':' + deleteReportepoch
         deleteReportheaders = {'Content-Type':'application/json','Authorization':deleteReportauth}
 
         #Make request
