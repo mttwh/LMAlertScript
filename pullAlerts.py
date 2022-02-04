@@ -166,7 +166,9 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     # making pandas dataframe for use with power bi 
     stagedJson = json.dumps(csvList)
-    df = pd.DataFrame.from_records(stagedJson)
+    print("json staged")
+    df = pd.read_json(stagedJson)
+    print("dataframe grabbed")
 
     # output the dataframe
     print(df)
