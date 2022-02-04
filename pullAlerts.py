@@ -204,4 +204,4 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     print("Reports successfully deleted")
     responseObject = json.dumps(csvList)
-    return df.to_json()
+    return responseObject
