@@ -10,6 +10,7 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
     from datetime import datetime, timedelta
     import urllib.request
     import pandas as pd
+    import json2html
 
     #initialize variables
     dayCounter = 1
@@ -167,11 +168,6 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
     # making pandas dataframe for use with power bi 
     stagedJson = json.dumps(csvList)
     print("json staged")
-    df = pd.read_json(stagedJson)
-    print("dataframe grabbed")
-
-    # output the dataframe
-    print(df)
 
     #Once I get the output all pieced together, I need to delete all the reports generated
     for reportIdToDelete in reportIdList:
@@ -203,5 +199,5 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
         print('Response Status:',deleteReportresponse.status_code)
 
     print("Reports successfully deleted")
-    responseObject = json.dumps(csvList)
-    return df.to_html()
+    
+    return json2html.convert(json = stagedJson)
