@@ -1,5 +1,5 @@
 from flask import Flask, request
-from v230DayAlertReport import grab_alerts
+from pullAlerts import grab_alerts
 
 app = Flask(__name__)
 
@@ -8,7 +8,7 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello World!'
 
-@app.get('/GrabAlerts30Days')
+@app.get('/grabAlerts')
 def pull_alerts():
     args = request.args
     lmAccessId = args.get("accessId")
