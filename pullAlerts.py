@@ -10,7 +10,7 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
     from datetime import datetime, timedelta
     import urllib.request
     import pandas as pd
-    import json2html
+    from json2html import *
 
     #initialize variables
     dayCounter = 1
