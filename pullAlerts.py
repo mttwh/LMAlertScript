@@ -200,4 +200,4 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     print("Reports successfully deleted")
     
-    return json2html.convert(json = stagedJson)
+    return json2html.convert(json = csvList)
