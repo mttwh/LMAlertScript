@@ -165,7 +165,8 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
     #print("CSV file written to local directory")
 
     # making pandas dataframe for use with power bi 
-    df = pd.read_csv(csv_filename)
+    stagedJson = json.dumps(csvList)
+    df = pd.DataFrame.from_records(stagedJson)
 
     # output the dataframe
     print(df)
@@ -201,4 +202,4 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     print("Reports successfully deleted")
     responseObject = json.dumps(csvList)
-    return responseObject
+    return df
