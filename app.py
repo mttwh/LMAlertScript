@@ -14,4 +14,5 @@ def pull_alerts():
     lmAccessId = args.get("accessId")
     lmAccessKey = args.get("accessKey")
     lmCompany = args.get("lmCompany")
-    return grab_alerts(lmAccessId, lmAccessKey, lmCompany)
+    daysOfAlerts = int(args.get("daysOfAlerts"))
+    return grab_alerts(lmAccessId, lmAccessKey, lmCompany, daysOfAlerts)

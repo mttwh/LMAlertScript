@@ -1,4 +1,4 @@
-def grab_alerts(accessId, accessKey, lmCompany):
+def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     import requests
     import json
@@ -14,13 +14,13 @@ def grab_alerts(accessId, accessKey, lmCompany):
     #initialize variables
     dayCounter = 1
     #lowerBoundValue needs to be edited if you want to adjust the length that this will go back (30 days, 7 days, etc.)
-    lowerBoundValue = 30
+    lowerBoundValue = daysOfAlerts
     dayDecrementer = 1
     upperBoundValue = lowerBoundValue - dayDecrementer
     reportIdList = []
 
     #run a report of all alerts triggered over the past 30 days, 1 day at a time
-    while dayCounter <= 7:
+    while dayCounter <= daysOfAlerts:
         formattedLowerBoundDate = (datetime.now() - timedelta(lowerBoundValue)).strftime('%Y-%m-%d %H:%M')
         formattedUpperBoundDate = (datetime.now() - timedelta(upperBoundValue)).strftime('%Y-%m-%d %H:%M')
         
