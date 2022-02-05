@@ -1,3 +1,5 @@
+#example API call below
+#http://127.0.0.1:5000/grabAlerts?accessId=5xwWB2Jzi5RmvxNv6777&accessKey=~(3p-]ypHZnrJdaZ_3_E_bqk52E}t^335Q_8)C~[&lmCompany=haservices&daysOfAlerts=7
 def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     import requests
@@ -27,7 +29,7 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
         httpVerb ='POST'
         resourcePath = '/report/reports'
         #report is defined in the data variable, including what columns are displayed
-        data = '{"type":"Alert","groupId":199,"name":"' + str(lowerBoundValue) + ' Day Report - Part ' + str(dayCounter) + '","includePreexist":false,"sdtFilter":"nonsdt","timing":"start","dateRange":"' + formattedLowerBoundDate + ' TO ' + formattedUpperBoundDate + '","format":"CSV","description":"Series of reports to get all alerts triggered in the past 30 days.","delivery":"none","groupFullPath":"*","level":"all","activeOnly":false,"columns":[{"name":"Severity","isHidden":false},{"name":"Device","isHidden":false},{"name":"Datasource","isHidden":false},{"name":"Instance","isHidden":false},{"name":"Datapoint","isHidden":false},{"name":"Value","isHidden":true},{"name":"Began","isHidden":false},{"name":"Group","isHidden":false},{"name":"Thresholds","isHidden":true},{"name":"End","isHidden":true},{"name":"Rule","isHidden":true},{"name":"Chain","isHidden":true},{"name":"Acked","isHidden":true},{"name":"Acked By","isHidden":true},{"name":"Acked On","isHidden":true},{"name":"Notes","isHidden":true},{"name":"In SDT","isHidden":true}]}'
+        data = '{"type":"Alert","groupId":199,"name":"' + str(lowerBoundValue) + ' Day Report - Part ' + str(dayCounter) + ' - Date: ' + str(formattedLowerBoundDate) + '","includePreexist":false,"sdtFilter":"nonsdt","timing":"start","dateRange":"' + formattedLowerBoundDate + ' TO ' + formattedUpperBoundDate + '","format":"CSV","description":"Series of reports to get all alerts triggered in the past 30 days.","delivery":"none","groupFullPath":"*","level":"all","activeOnly":false,"columns":[{"name":"Severity","isHidden":false},{"name":"Device","isHidden":false},{"name":"Datasource","isHidden":false},{"name":"Instance","isHidden":false},{"name":"Datapoint","isHidden":false},{"name":"Value","isHidden":true},{"name":"Began","isHidden":false},{"name":"Group","isHidden":false},{"name":"Thresholds","isHidden":true},{"name":"End","isHidden":true},{"name":"Rule","isHidden":true},{"name":"Chain","isHidden":true},{"name":"Acked","isHidden":true},{"name":"Acked By","isHidden":true},{"name":"Acked On","isHidden":true},{"name":"Notes","isHidden":true},{"name":"In SDT","isHidden":true}]}'
         lowerBoundValue -= dayDecrementer
         upperBoundValue -= dayDecrementer
         dayCounter +=1
@@ -123,7 +125,7 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     #define values for CSV file
     csv_columns = ["Severity", "Device", "Datasource", "Instance", "Datapoint", "Began", "Client Code", "Group"]
-    csv_filename = "alertListv3.csv"
+    csv_filename = "alertListv4.csv"
     csvList = []
     for alertEntry in masterList:
         severity = alertEntry[0].strip('"')
@@ -153,6 +155,15 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     totalAlerts = len(csvList)
     print("Total alerts past " + str(daysOfAlerts) + " days - " + str(totalAlerts))
+
+    #write data to CSV file with collector information
+    with open(csv_filename, "w", newline="") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+        writer.writeheader()
+        for entry in csvList:
+            writer.writerow(entry)
+
+    print("CSV file written to local directory")
 
     #Once I get the output all pieced together, I need to delete all the reports generated
     for reportIdToDelete in reportIdList:
@@ -184,5 +195,5 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
         print('Response Status:',deleteReportresponse.status_code)
 
     print("Reports successfully deleted")
-    
-    return json.dumps(csvList)
+    responseAsJson = json.dumps(csvList)
+    return responseAsJson
