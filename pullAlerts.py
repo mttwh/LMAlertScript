@@ -1,4 +1,3 @@
-from json2html import *
 def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     import requests
@@ -10,7 +9,6 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
     import csv
     from datetime import datetime, timedelta
     import urllib.request
-    import pandas as pd
 
     #initialize variables
     dayCounter = 1
@@ -154,20 +152,7 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
         csvList.append(temp_dict)
 
     totalAlerts = len(csvList)
-    print("Total alerts past 30 days - " + str(totalAlerts))
-
-    #write data to CSV file with collector informatio
-    with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-        writer.writeheader()
-        for entry in csvList:
-            writer.writerow(entry)
-
-    #print("CSV file written to local directory")
-
-    # making pandas dataframe for use with power bi 
-    stagedJson = json.dumps(csvList)
-    print("json staged")
+    print("Total alerts past " + str(daysOfAlerts) + " days - " + str(totalAlerts))
 
     #Once I get the output all pieced together, I need to delete all the reports generated
     for reportIdToDelete in reportIdList:
@@ -200,4 +185,4 @@ def grab_alerts(accessId, accessKey, lmCompany, daysOfAlerts):
 
     print("Reports successfully deleted")
     
-    return json2html.convert(json = csvList)
+    return json.dumps(csvList)
